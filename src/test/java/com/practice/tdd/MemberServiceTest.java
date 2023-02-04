@@ -37,7 +37,7 @@ public class MemberServiceTest {
 
         //when
         String userId = "userA";
-        MembershipType membershipType = MembershipType.NAVER;
+        MembershipType membershipType = MembershipType.KAKAO;
         Integer point = 20000;
 
         Membership result = memberService.create(userId, membershipType, point);
@@ -45,7 +45,7 @@ public class MemberServiceTest {
         //then
         assertThat(result.getId()).isNotNull();
         assertThat(result.getUserId()).isEqualTo(userA.getUserId());
-        assertThat(result.getMembershipType()).isEqualTo(userA.getMembershipType());
+        assertThat(result.getMembershipType()).isEqualTo(MembershipType.KAKAO);
         assertThat(result.getPoint()).isEqualTo(20000);
 
     }
