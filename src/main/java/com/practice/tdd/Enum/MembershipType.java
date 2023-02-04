@@ -13,4 +13,5 @@ public enum MembershipType {
     ;
 
     private final String companyName;
+
 }
