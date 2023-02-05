@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.reflect.Member;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -81,14 +82,32 @@ public class MemberServiceTest {
     @DisplayName("멤버십 상세조회 실패 - 존재하지 않음")
     void NoMembership() {
         //given
+        Long id = 1L;
+
         //when
+        Optional<Membership> result = memberService.readDetailMembership(id);
+
         //then
+        Assertions.assertThat(result).isNull();
     }
 
     @Test
     @DisplayName("멤버십 상세조회 실패 - 본인이 아님")
     void NotOwnMembership() {
+        //given
+        Membership userA = Membership.builder()
+                .userId("userA")
+                .membershipType(MembershipType.NAVER)
+                .point(10000)
+                .build();
 
+        membershipRepository.save(userA);
+
+        //when
+        memberService.readDetailMembership(1L);
+        //다시해보기 멤버십ID를 어터캐 할지 생각해보기( 내가봤을 때 member엔티티를 만들어서 참조인덱스로 만드는게 제일 베스트)
+
+        //then
     }
 
     @Test

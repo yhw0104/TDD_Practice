@@ -44,8 +44,12 @@ public class MemberService {
         return findMembership;
     }
 
-    public Membership readDetailMembership(String userId) {
-        return null;
+    public Optional<Membership> readDetailMembership(Long id) {
+        Optional<Membership> detailMembership = membershipRepository.findById(id);
+        if(detailMembership.isEmpty())
+            return null;
+        else
+            return detailMembership;
     }
 
 }
