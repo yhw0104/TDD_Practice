@@ -76,4 +76,24 @@ public class MemberServiceTest {
         //then
         assertThat(findMembership.size()).isEqualTo(2);
     }
+
+    @Test
+    @DisplayName("멤버십 상세조회 실패 - 존재하지 않음")
+    void NoMembership() {
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("멤버십 상세조회 실패 - 본인이 아님")
+    void NotOwnMembership() {
+
+    }
+
+    @Test
+    @DisplayName("멤버십 상세조회 성공")
+    void findDetailMembership() {
+
+    }
 }

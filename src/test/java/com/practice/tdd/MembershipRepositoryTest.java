@@ -1,6 +1,7 @@
 package com.practice.tdd;
 
 
+import com.practice.tdd.Enum.MembershipErrorResult;
 import com.practice.tdd.Enum.MembershipType;
 import com.practice.tdd.entity.Membership;
 import com.practice.tdd.repository.MembershipRepository;
@@ -73,7 +74,12 @@ public class MembershipRepositoryTest {
     void NoMembership(){
         List<Membership> findMembership = membershipRepository.findByUserId("userId");
 
+        MembershipErrorResult result = null;
+        if(findMembership.size() == 0) {
+            result = MembershipErrorResult.MEMBERSHIP_NOT_FOUND;
+        }
         assertThat(findMembership.size()).isEqualTo(0);
+        Assertions.assertThat(result.getMessage()).isEqualTo("Membership Not found");
     }
 
     @Test

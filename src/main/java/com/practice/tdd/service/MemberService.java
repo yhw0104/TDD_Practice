@@ -1,5 +1,6 @@
 package com.practice.tdd.service;
 
+import com.practice.tdd.Enum.MembershipErrorResult;
 import com.practice.tdd.Enum.MembershipType;
 import com.practice.tdd.entity.Membership;
 import com.practice.tdd.repository.MembershipRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -41,4 +43,9 @@ public class MemberService {
 
         return findMembership;
     }
+
+    public Membership readDetailMembership(String userId) {
+        return null;
+    }
+
 }
