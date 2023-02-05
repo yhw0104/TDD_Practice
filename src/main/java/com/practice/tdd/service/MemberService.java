@@ -6,6 +6,8 @@ import com.practice.tdd.repository.MembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MemberService {
 
@@ -31,5 +33,12 @@ public class MemberService {
 
             return makeMembership2;
         }
+    }
+
+    public List<Membership> read(String userId /*dto로 받는다.*/) {
+        // dto -> entity로 변경후 멤버십 조회
+        List<Membership> findMembership = membershipRepository.findByUserId(userId);
+
+        return findMembership;
     }
 }
