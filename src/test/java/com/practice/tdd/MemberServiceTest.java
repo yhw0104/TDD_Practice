@@ -30,7 +30,7 @@ public class MemberServiceTest {
     private MemberService memberService;
 
     @Test
-    void 멤버십서비스에서중복검사(){
+    void 멤버십서비스에서멤버십중복검사(){
         //given
 
         //제일 먼저 멤버십이 있다는 가정을 한다.
@@ -71,13 +71,13 @@ public class MemberServiceTest {
                 .build();
 
         Membership NaverUserA = Membership.builder()
-                .membershipId(1L)
+                .memberIdIndex(1L)
                 .membershipType(MembershipType.NAVER)
                 .point(10000)
                 .build();
 
         Membership KakaoUserA = Membership.builder()
-                .membershipId(1L)
+                .memberIdIndex(1L)
                 .membershipType(MembershipType.KAKAO)
                 .point(10000)
                 .build();
@@ -93,40 +93,59 @@ public class MemberServiceTest {
         assertThat(findMembership.size()).isEqualTo(2);
     }
 
-//    @Test
-//    @DisplayName("멤버십 상세조회 실패 - 존재하지 않음")
-//    void NoMembership() {
-//        //given
-//        Long id = 1L;
-//
-//        //when
-//        Optional<Membership> result = memberService.readDetailMembership(id);
-//
-//        //then
-//        Assertions.assertThat(result).isNull();
-//    }
-//
-//    @Test
-//    @DisplayName("멤버십 상세조회 실패 - 본인이 아님")
-//    void NotOwnMembership() {
-//        //given
-//        Membership userA = Membership.builder()
-//                .membershipType(MembershipType.NAVER)
-//                .point(10000)
-//                .build();
-//
-//        membershipRepository.save(userA);
-//
-//        //when
-//        memberService.readDetailMembership(1L);
-//        //다시해보기 멤버십ID를 어터캐 할지 생각해보기( 내가봤을 때 member엔티티를 만들어서 참조인덱스로 만드는게 제일 베스트)
-//
-//        //then
-//    }
-//
-//    @Test
-//    @DisplayName("멤버십 상세조회 성공")
-//    void findDetailMembership() {
-//
-//    }
+    @Test
+    @DisplayName("멤버십 상세조회 실패 - 존재하지 않음")
+    void NoMembership() {
+        //given
+        Member member = Member.builder()
+                .userId("userA")
+                .userPassword("userAPassword")
+                .userName("userA")
+                .build();
+
+        Membership userA = Membership.builder()
+                .memberIdIndex(1L)
+                .membershipType(MembershipType.NAVER)
+                .point(10000)
+                .build();
+
+        memberRepository.save(member);
+        membershipRepository.save(userA);
+
+        //when
+        Long memberIdIndex = 2L;
+        MembershipType membershipType = MembershipType.NAVER;
+
+        Membership result = memberService.readDetailMembership(memberIdIndex, membershipType);
+
+        //then
+        Assertions.assertThat(result).isNull();
+    }
+
+    @Test
+    @DisplayName("멤버십 상세조회 성공")
+    void findDetailMembership() {
+        //given
+        Member member = Member.builder()
+                .userId("userA")
+                .userPassword("userAPassword")
+                .userName("userA")
+                .build();
+
+        Membership userA = Membership.builder()
+                .memberIdIndex(1L)
+                .membershipType(MembershipType.NAVER)
+                .point(10000)
+                .build();
+
+        memberRepository.save(member);
+        membershipRepository.save(userA);
+        //when
+        Membership membership = memberService.readDetailMembership(1L, MembershipType.NAVER);
+
+        //then
+        assertThat(membership).isNotNull();
+        assertThat(membership.getMembershipType()).isEqualTo(MembershipType.NAVER);
+        assertThat(membership.getPoint()).isEqualTo(10000);
+    }
 }

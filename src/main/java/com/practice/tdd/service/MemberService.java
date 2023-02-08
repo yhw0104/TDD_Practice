@@ -46,7 +46,6 @@ public class MemberService {
 
         if(result != null) {
             System.out.println("이미 등록된 회원멤버십입니다.");
-
             return null;
         } else {
             // MembershipDto로 받은 데이터 toEntity()메서드를 사용하여 엔티티로 변경
@@ -69,11 +68,12 @@ public class MemberService {
         return findMembership;
     }
 
-    public Optional<Membership> readDetailMembership(Long id) {
-        Optional<Membership> detailMembership = membershipRepository.findById(id);
-        if(detailMembership.isEmpty())
+    public Membership readDetailMembership(Long memberIdIndex, MembershipType membershipType) {
+        Membership detailMembership = membershipRepository.findByMemberIdIndexAndMembershipType(memberIdIndex, membershipType);
+        if(detailMembership == null){
+            System.out.println("해당 멤버십이 없습니다.");
             return null;
-        else
+        }
             return detailMembership;
     }
 
