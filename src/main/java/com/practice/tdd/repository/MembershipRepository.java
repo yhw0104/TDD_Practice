@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface MembershipRepository extends JpaRepository<Membership, Long> {
-    Membership findByUserIdAndMembershipType(String userId, MembershipType membershipType);
+    Membership findByMemberIdAndMembershipType(Long memberId, MembershipType membershipType);
 
-    List<Membership> findByUserId(String userId);
+    List<Membership> findByMemberIdIndex(Long memberIdIndex);
 }
 
