@@ -1,7 +1,9 @@
 package com.practice.tdd;
 
 import com.practice.tdd.Enum.MembershipType;
+import com.practice.tdd.entity.Member;
 import com.practice.tdd.entity.Membership;
+import com.practice.tdd.repository.MemberRepository;
 import com.practice.tdd.repository.MembershipRepository;
 import com.practice.tdd.service.MemberService;
 import org.assertj.core.api.Assertions;
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,9 @@ public class MemberServiceTest {
     private MembershipRepository membershipRepository;
 
     @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
     private MemberService memberService;
 
     @Test
@@ -30,24 +34,36 @@ public class MemberServiceTest {
         //given
 
         //제일 먼저 멤버십이 있다는 가정을 한다.
-        Membership member = Membership.builder()
+        Member member = Member.builder()
                 .userId("userA")
-                .membershipType(MembershipType.NAVER)
+                .userPassword("userAPassword")
+                .userName("userA")
+                .build();
+
+        Membership member1 = Membership.builder()
+                .memberIdIndex(1L)
+                .membershipType(MembershipType.KAKAO)
                 .point(10000)
                 .build();
 
-        Membership userA = membershipRepository.save(member);
+        Member memberUserA = memberRepository.save(member);
+        Membership userA = membershipRepository.save(member1);
 
         //when
-        String userId = "userA";
+        String userId = "userB";
+        Long memberIdIndex = 1L;
+        String userPassword = "userBPassword";
+        String memberName = "userB";
+
         MembershipType membershipType = MembershipType.KAKAO;
         Integer point = 20000;
 
-        Membership result = memberService.create(userId, membershipType, point);
+        Member memberResult = memberService.createMember(userId, userPassword, memberName);
+        Membership result = memberService.createMembership(memberIdIndex, membershipType, point);
 
         //then
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getUserId()).isEqualTo(userA.getUserId());
+        assertThat(result.getMembershipId()).isNotNull();
+        assertThat(memberResult.getId()).isNotNull();
         assertThat(result.getMembershipType()).isEqualTo(MembershipType.KAKAO);
         assertThat(result.getPoint()).isEqualTo(20000);
     }
@@ -56,14 +72,18 @@ public class MemberServiceTest {
     @DisplayName("멤버십 조회 기능")
     void findMembership(){
         //given
-        Membership NaverUserA = Membership.builder()
+        Member member = Member.builder()
                 .userId("userA")
+                .userPassword("userAPassword")
+                .userName("userA")
+                .build();
+
+        Membership NaverUserA = Membership.builder()
                 .membershipType(MembershipType.NAVER)
                 .point(10000)
                 .build();
 
         Membership KakaoUserA = Membership.builder()
-                .userId("userA")
                 .membershipType(MembershipType.KAKAO)
                 .point(10000)
                 .build();
@@ -72,7 +92,7 @@ public class MemberServiceTest {
         Membership kakaoUserA = membershipRepository.save(KakaoUserA);
 
         //when
-        List<Membership> findMembership = memberService.read("userA");
+        List<Membership> findMembership = memberService.read(1L);
 
         //then
         assertThat(findMembership.size()).isEqualTo(2);
@@ -96,7 +116,6 @@ public class MemberServiceTest {
     void NotOwnMembership() {
         //given
         Membership userA = Membership.builder()
-                .userId("userA")
                 .membershipType(MembershipType.NAVER)
                 .point(10000)
                 .build();

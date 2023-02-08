@@ -14,22 +14,24 @@ import java.time.LocalDateTime;
 @Builder
 public class MembershipDto {
 
-    private Long id;
-    private String userId;
+    private Long membershipId;
+
     private MembershipType membershipType;
     private int point;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private Long memberIdIndex;
+
 
     public Membership toEntity(){
         Membership membership = Membership.builder()
-                .id(id)
-                .userId(userId)
+                .membershipId(membershipId)
                 .membershipType(membershipType)
                 .point(point)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
+                .memberIdIndex(memberIdIndex)
                 .build();
 
         return membership;

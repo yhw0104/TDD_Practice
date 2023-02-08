@@ -23,11 +23,7 @@ public class Membership {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // id 자동증가 생성
-    private Long id;
-
-    @Column
-    @NotNull    //null이면 예외 출력
-    private String userId;
+    private Long membershipId;
 
     @Column
     @NotNull
@@ -44,14 +40,18 @@ public class Membership {
     @Column(length = 20)
     private LocalDateTime updatedAt;
 
+    @Column
+    @NotNull
+    // member 참조 인덱스
+    private Long memberIdIndex;
+
     public MembershipDto toDto(){
         MembershipDto membershipDto = MembershipDto.builder()
-                .id(id)
-                .userId(userId)
                 .membershipType(membershipType)
                 .point(point)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
+                .memberIdIndex(memberIdIndex)
                 .build();
 
         return membershipDto;
