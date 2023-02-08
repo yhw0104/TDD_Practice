@@ -65,7 +65,8 @@ public class MembershipRepositoryTest {
                 .build();
 
         //when
-        Member result = memberRepository.findByUserId("userAID");
+        memberRepository.save(member);
+        Member result = memberRepository.findByUserId("userAId");
 
         //then
         assertThat(result.getUserId()).isEqualTo(member.getUserId());
@@ -94,7 +95,7 @@ public class MembershipRepositoryTest {
 
         //then
         assertThat(memberResult.getId()).isNotNull();
-        assertThat(member.getUserId()).isEqualTo(memberResult.getUserId());
+        assertThat(memberResult.getUserId()).isEqualTo(member.getUserId());
         assertThat(membershipResult.getMembershipType()).isEqualTo(member1.getMembershipType());
         assertThat(membershipResult.getPoint()).isEqualTo(member1.getPoint());
     }
@@ -117,7 +118,7 @@ public class MembershipRepositoryTest {
         //when
         Member memberResult = memberRepository.save(member);
         Membership result = membershipRepository.save(member1);
-        Membership findResult = membershipRepository.findByMemberIdAndMembershipType(1L, MembershipType.NAVER);
+        Membership findResult = membershipRepository.findByMemberIdIndexAndMembershipType(1L, MembershipType.NAVER);
 
         //then
         assertThat(findResult.getMemberIdIndex()).isEqualTo(1L);

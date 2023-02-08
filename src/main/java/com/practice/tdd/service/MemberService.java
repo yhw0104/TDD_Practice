@@ -21,7 +21,7 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
-    public Member createMember(String userId, String memberPassword, String memberName){
+    public Member createMember(String userId, String userPassword, String userName){
         Member result = memberRepository.findByUserId(userId);
 
         if(result != null){
@@ -42,7 +42,7 @@ public class MemberService {
 
     public Membership createMembership(Long memberIdIndex, MembershipType membershipType, Integer point    /*나중에 MembershipDto로 변경*/) {
 
-        Membership result = membershipRepository.findByMemberIdAndMembershipType(memberIdIndex, membershipType);
+        Membership result = membershipRepository.findByMemberIdIndexAndMembershipType(memberIdIndex, membershipType);
 
         if(result != null) {
             System.out.println("이미 등록된 회원멤버십입니다.");
