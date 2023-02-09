@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class MemberServiceTest {
     private MemberService memberService;
 
     @Test
-    void 멤버십서비스에서멤버십중복검사(){
+    void 멤버십서비스에서멤버십중복검사() {
         //given
 
         //제일 먼저 멤버십이 있다는 가정을 한다.
@@ -62,7 +63,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("멤버십 조회 기능")
-    void findMembership(){
+    void findMembership() {
         //given
         Member member = Member.builder()
                 .userId("userA")
@@ -147,5 +148,54 @@ public class MemberServiceTest {
         assertThat(membership).isNotNull();
         assertThat(membership.getMembershipType()).isEqualTo(MembershipType.NAVER);
         assertThat(membership.getPoint()).isEqualTo(10000);
+    }
+
+    @Test
+    @DisplayName("멤버십 삭제 실패 / 멤버십이 존재하지 않음")
+    @Transactional
+    void deleteMembership_NoMembership() {
+        //given
+        Member member = Member.builder()
+                .userId("userA")
+                .userPassword("userAPassword")
+                .userName("userA")
+                .build();
+
+        memberRepository.save(member);
+
+        //when
+        Long membershipId = 1L;
+
+        memberService.deleteMembership(membershipId);
+        //then
+
+    }
+
+    @Test
+    @DisplayName("멤버십 삭제 성공")
+    @Transactional
+    void deleteMemberhsip() {
+        //given
+        Member member = Member.builder()
+                .userId("userA")
+                .userPassword("userAPassword")
+                .userName("userA")
+                .build();
+
+        Membership userA = Membership.builder()
+                .memberIdIndex(1L)
+                .membershipType(MembershipType.NAVER)
+                .point(10000)
+                .build();
+
+        memberRepository.save(member);
+        membershipRepository.save(userA);
+
+        //when
+        memberService.deleteMembership(1L);
+
+        //then
+        assertThat(membershipRepository.findByMembershipId(1L)).isNull();
+
     }
 }

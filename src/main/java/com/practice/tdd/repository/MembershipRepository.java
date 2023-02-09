@@ -13,5 +13,9 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
     Membership findByMemberIdIndexAndMembershipType(Long memberId, MembershipType membershipType);
 
     List<Membership> findByMemberIdIndex(Long memberIdIndex);
+
+    void deleteByMembershipId(Long membershipId);
+
+    Membership findByMembershipId(Long membershipId);
 }
 

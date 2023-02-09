@@ -172,5 +172,31 @@ public class MembershipRepositoryTest {
         assertThat(findResult.size()).isEqualTo(2);
     }
 
+    @Test
+    @DisplayName("멤버십 삭제")
+    void deleteMembership() {
+        //given
+        Member member = Member.builder()
+                .userId("userA")
+                .userPassword("userAPassword")
+                .userName("userA")
+                .build();
+
+        Membership KakaoUserA = Membership.builder()
+                .memberIdIndex(1L)
+                .membershipType(MembershipType.KAKAO)
+                .point(10000)
+                .build();
+
+        memberRepository.save(member);
+        membershipRepository.save(KakaoUserA);
+
+        //when
+        membershipRepository.deleteByMembershipId(1L);
+
+        //then
+        assertThat(membershipRepository.findByMembershipId(1L)).isNull();
+    }
+
 }
 

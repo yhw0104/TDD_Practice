@@ -77,4 +77,15 @@ public class MemberService {
             return detailMembership;
     }
 
+    public void deleteMembership(Long membershipId) {
+        Membership deleteMembership = membershipRepository.findByMembershipId(membershipId);
+
+        if(deleteMembership == null){
+            System.out.println("해당 멤버십이 없습니다.");
+        }
+        if(deleteMembership != null){
+            membershipRepository.deleteByMembershipId(membershipId);
+        }
+
+    }
 }
