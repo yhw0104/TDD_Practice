@@ -2,10 +2,7 @@ package com.practice.tdd.entity;
 
 import com.practice.tdd.Enum.MembershipType;
 import com.practice.tdd.dto.MembershipDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -30,6 +27,7 @@ public class Membership {
     private MembershipType membershipType;
 
     @Column
+    @Setter
     private int point;
 
     @CreationTimestamp  //INSERT 쿼리가 발생할 때, 현재 시간을 값으로 채워서 쿼리를 생성한다.

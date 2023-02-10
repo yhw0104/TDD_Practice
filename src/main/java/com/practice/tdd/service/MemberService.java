@@ -8,11 +8,13 @@ import com.practice.tdd.repository.MemberRepository;
 import com.practice.tdd.repository.MembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class MemberService {
 
     @Autowired
@@ -21,6 +23,12 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private PointService ratePointService;
+
+
+
+    @Transactional
     public Member createMember(String userId, String userPassword, String userName){
         Member result = memberRepository.findByUserId(userId);
 
@@ -40,6 +48,7 @@ public class MemberService {
         }
     }
 
+    @Transactional
     public Membership createMembership(Long memberIdIndex, MembershipType membershipType, Integer point    /*나중에 MembershipDto로 변경*/) {
 
         Membership result = membershipRepository.findByMemberIdIndexAndMembershipType(memberIdIndex, membershipType);
@@ -68,6 +77,7 @@ public class MemberService {
         return findMembership;
     }
 
+    @Transactional
     public Membership readDetailMembership(Long memberIdIndex, MembershipType membershipType) {
         Membership detailMembership = membershipRepository.findByMemberIdIndexAndMembershipType(memberIdIndex, membershipType);
         if(detailMembership == null){
@@ -77,6 +87,7 @@ public class MemberService {
             return detailMembership;
     }
 
+    @Transactional
     public void deleteMembership(Long membershipId) {
         Membership deleteMembership = membershipRepository.findByMembershipId(membershipId);
 
@@ -86,6 +97,14 @@ public class MemberService {
         if(deleteMembership != null){
             membershipRepository.deleteByMembershipId(membershipId);
         }
+    }
 
+    @Transactional
+    public void MembershipPoint(Long memberIdIndex, MembershipType membershipType, Integer price){
+
+        Membership membership = membershipRepository.findByMemberIdIndexAndMembershipType(memberIdIndex, membershipType);
+        int point = ratePointService.calculateAmount(price);
+
+        membership.setPoint(point + membership.getPoint());
     }
 }
