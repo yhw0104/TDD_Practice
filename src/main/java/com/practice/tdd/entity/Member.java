@@ -1,5 +1,6 @@
 package com.practice.tdd.entity;
 
+import com.practice.tdd.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +32,15 @@ public class Member {
     @Column
     @NotNull
     private String userName;
+
+    public MemberDto toDto(){
+        MemberDto memberDto = MemberDto.builder()
+                .id(id)
+                .userId(userId)
+                .userPassword(userPassword)
+                .userName(userName)
+                .build();
+
+        return memberDto;
+    }
 }
